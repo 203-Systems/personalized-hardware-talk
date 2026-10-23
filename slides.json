@@ -2,7 +2,7 @@
   "title": "从你的创意到个性化硬件",
   "width": 12192000,
   "height": 6858000,
-  "source": "source/从你的创意到个性化硬件_讲座版_v5.pptx",
+  "source": "source/从你的创意到个性化硬件_讲座版_v6.pptx",
   "slides": [
     {
       "number": 1,
@@ -120,12 +120,8 @@
         "按下格子，演奏和弦",
         "松开停止，灯光向外扩散",
         "大调与小调，一键切换",
-        "Codex ",
-        "查阅 ",
-        "Wiki",
-        "，依据 ",
-        "Python API ",
-        "实现",
+        "Codex 查阅 Wiki",
+        "依据 Python API 实现",
         "07"
       ],
       "image": "assets/previews/slide-07.png",

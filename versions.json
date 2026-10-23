@@ -1,6 +1,14 @@
 {
-  "current": "v5",
+  "current": "v6",
   "versions": [
+    {
+      "id": "v6",
+      "date": "2026-10-23T12:32:12+08:00",
+      "notes": "第7页和弦涟漪按12栏网格重排：统一边距、文字对齐和8px间距，左5栏文字、右7栏图片；同步单页PPTX、完整讲稿与预览，保留v5。",
+      "slideCount": 11,
+      "manifest": "versions/v6/slides.json",
+      "sourceRevision": "dc491e299ebf529a59142db08c3aab42cf54922a"
+    },
     {
       "id": "v5",
       "date": "2026-10-23T11:57:42+08:00",
