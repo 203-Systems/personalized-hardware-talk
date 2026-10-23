@@ -1,4 +1,4 @@
-import { initCollaboration } from './collaboration.js';
+import { initCollaboration } from './collaboration.js?r=progress-20261023-1';
 const $ = (selector) => document.querySelector(selector);
 let deck;
 let version;

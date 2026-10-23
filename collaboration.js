@@ -1,4 +1,4 @@
-import {verifyProgress, progressCard} from './progress.js';
+import {verifyProgress, progressCard} from './progress.js?r=progress-20261023-1';
 const $ = selector => document.querySelector(selector);
 const statusNames = {open:'待处理',planned:'已计划',done:'已完成',resolved:'已解决'};
 let api, context, items = [], replies = [], point = null, replyTo = null, offset = 0, requestSerial = 0;
