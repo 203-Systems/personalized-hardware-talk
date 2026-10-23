@@ -55,7 +55,7 @@ python3 scripts/validate.py
 
 拆分和检查只需 Python 标准库。预览生成使用 LibreOffice 和 Poppler，详见脚本帮助；需安装原稿使用的 HarmonyOS Sans SC、Arial 字体。预览图已提交，浏览演示不需要安装字体或 Office。
 
-完整性检查用于确认本次拆分与原稿一致。若故意修改独立页面，需要同步更新完整原稿后再运行检查。
+默认完整性检查验证单页结构、内部资源引用、比例和预览文件，允许各页独立修改。首次拆分后还可以运行 `python3 scripts/validate.py --against-source`，逐字节验证幻灯片内容和依赖资源与完整原稿一致；单页修改后无需通过这项额外比对。
 
 ## 发布
 
