@@ -19,13 +19,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Validate slide packages
-        run: python3 scripts/validate.py
+        run: |
+          python3 scripts/validate.py
+          python3 scripts/validate_versions.py
+          node --check app.js
+          node --check collaboration.js
       - uses: actions/configure-pages@v5
       - name: Collect public website
         run: |
           mkdir -p .build/site
-          cp index.html app.js styles.css slides.json .nojekyll .build/site/
-          cp -R assets slides source .build/site/
+          cp index.html app.js collaboration.js collaboration-config.json styles.css slides.json versions.json .nojekyll .build/site/
+          cp -R assets slides source versions .build/site/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .build/site

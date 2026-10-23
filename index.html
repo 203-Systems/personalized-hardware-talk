@@ -10,8 +10,9 @@
   <script type="module" src="app.js"></script>
 </head>
 <body>
+  <header id="workspace-bar"><button id="versions-button" title="版本记录">版本 <strong id="version-label">加载中</strong> ▾</button><span id="version-notice">演讲协作</span><button id="review-button" aria-expanded="false" aria-controls="review-panel">评论 / 需求</button></header>
   <main id="stage" aria-label="演示文稿">
-    <div id="canvas"><img id="slide" alt="" draggable="false" fetchpriority="high"></div>
+    <div id="canvas"><img id="slide" alt="" draggable="false" fetchpriority="high"><div id="markers" aria-label="页面标注"></div></div>
     <p id="status" class="sr-only" role="status" aria-live="polite"></p>
     <p id="error" hidden>演示文稿加载失败，请刷新页面重试。</p>
   </main>
@@ -30,6 +31,21 @@
       <button id="help" aria-label="快捷键帮助" title="快捷键 ?">?</button>
     </div>
   </nav>
+  <div id="annotation-hint" hidden>点击幻灯片中的位置，为反馈添加标注。<button id="cancel-annotation">取消</button></div>
+  <aside id="review-panel" aria-labelledby="review-title" hidden>
+    <header><div><p class="eyebrow" id="review-context"></p><h2 id="review-title">评论与需求</h2></div><button id="close-review" aria-label="关闭协作面板">×</button></header>
+    <div class="review-filters"><label>类型<select id="feedback-kind-filter"><option value="all">全部</option><option value="comment">评论与标注</option><option value="request">需求</option></select></label><label>状态<select id="feedback-status-filter"><option value="all">全部状态</option><option value="open">待处理</option><option value="planned">已计划</option><option value="done">已完成</option><option value="resolved">已解决</option></select></label><button id="refresh-feedback">刷新</button></div>
+    <p id="feedback-message" role="status" aria-live="polite"></p>
+    <div id="feedback-list"></div><button id="more-feedback" hidden>加载更多</button>
+    <form id="feedback-form">
+      <h3 id="compose-title">发送反馈</h3>
+      <div class="compose-row"><label>类型<select id="feedback-kind"><option value="comment">评论</option><option value="request">需求</option></select></label><label>昵称（可选）<input id="feedback-author" maxlength="40" autocomplete="nickname" placeholder="匿名访客"></label></div>
+      <label for="feedback-content" class="sr-only">评论或需求内容</label><textarea id="feedback-content" required maxlength="2000" rows="4" placeholder="写下评论，或描述希望修改的内容…"></textarea>
+      <div id="annotation-draft"></div><div class="compose-actions"><button type="button" id="annotate">＋ 标注位置</button><button type="button" id="cancel-reply" hidden>取消回复</button><button type="submit" id="send-feedback">发送</button></div>
+      <p class="privacy-note">匿名提交后公开可见。只有在原设备保留管理凭证，才能撤回自己的内容或更新状态。请勿填写私人信息。</p>
+    </form>
+  </aside>
+  <dialog id="versions-dialog" aria-labelledby="versions-title"><header><div><p class="eyebrow">VERSION HISTORY</p><h2 id="versions-title">演示文稿版本</h2></div><button data-close aria-label="关闭版本记录">关闭 ×</button></header><p class="dialog-note">每个版本独立保存页面与文件，评论和标注跟随对应版本。</p><div id="version-list"></div><a href="https://github.com/203-Systems/personalized-hardware-talk/commits/main/" target="_blank" rel="noopener noreferrer">查看网站代码修改记录 ↗</a></dialog>
   <button id="show-controls" title="显示控制栏 H" hidden>显示控制</button>
   <dialog id="overview-dialog" aria-labelledby="overview-title">
     <header><div><p class="eyebrow">203 SYSTEMS / PRESENTATION</p><h1 id="overview-title">从你的创意到个性化硬件</h1></div><button data-close aria-label="关闭目录">关闭 ×</button></header>

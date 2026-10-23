@@ -1,0 +1,13 @@
+{
+  "current": "v5",
+  "versions": [
+    {
+      "id": "v5",
+      "date": "2026-10-23T11:57:42+08:00",
+      "notes": "讲座版 v5 原稿归档，共 11 页。",
+      "slideCount": 11,
+      "manifest": "versions/v5/slides.json",
+      "sourceRevision": "86fe8ce7e9c92733bcf026d353e22ae472ed27e8"
+    }
+  ]
+}
