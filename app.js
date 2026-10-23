@@ -68,7 +68,7 @@ function toggleControls() {
 }
 
 async function init() {
-  const response = await fetch('versions.json');
+  const response = await fetch('versions.json', { cache: 'no-cache' });
   if (!response.ok) throw new Error('Unable to load version manifest');
   versions = await response.json();
   try { initAgent(); } catch (error) { console.error('Agent panel unavailable:', error); }

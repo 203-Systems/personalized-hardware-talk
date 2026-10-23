@@ -27,13 +27,11 @@ jobs:
           node --check agent.js
           node --check agent-service/server.mjs
           node --check progress.js
+          python3 -m py_compile scripts/build_site.py scripts/verify_deploy.py
           node scripts/test_progress.mjs
       - uses: actions/configure-pages@v5
       - name: Collect public website
-        run: |
-          mkdir -p .build/site
-          cp index.html app.js agent.js collaboration.js progress.js collaboration-config.json styles.css slides.json versions.json .nojekyll .build/site/
-          cp -R assets slides source versions .build/site/
+        run: python3 scripts/build_site.py .build/site
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .build/site

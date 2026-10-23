@@ -71,7 +71,13 @@ python3 scripts/validate.py
 
 ## 发布
 
-`main` 分支推送后，GitHub Actions 自动检查并部署 GitHub Pages。演示前端为静态文件，匿名反馈保存在独立 Sites / Cloudflare D1 服务，地址由 `collaboration-config.json` 指定。无需前端 Token，管理凭证由浏览器随机生成，服务器仅保存其摘要。
+`main` 分支推送后，GitHub Actions（`.github/workflows/pages.yml`）自动检查并部署 GitHub Pages，约半分钟；每一次推送都是一次完整部署，不是在线修改的热更新，无需手动操作。部署时 `scripts/build_site.py` 把脚本和样式地址里的 `?r=` 替换成这些代码文件的内容哈希（并生成 `build.json`），所以每个版本的网址都是新的，浏览器不会把旧脚本配到新页面上；GitHub Pages 允许浏览器把 `index.html` 缓存最多 10 分钟，已经打开的页面刷新（⌘R）即可拿到最新版。推送后用下面的命令确认真的上线：
+
+```sh
+python3 scripts/verify_deploy.py        # 等该提交的部署成功，并逐字节核对线上文件与仓库一致
+```
+
+演示前端为静态文件，匿名反馈保存在独立 Sites / Cloudflare D1 服务，地址由 `collaboration-config.json` 指定。无需前端 Token，管理凭证由浏览器随机生成，服务器仅保存其摘要。
 
 ### 发布新的演示版本
 

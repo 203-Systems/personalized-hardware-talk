@@ -28,9 +28,9 @@
 ## 运行
 
 ```sh
-node --test test/server.test.mjs        # 用假的 claude 跑完整流程，无需联网
+node --test test/server.test.mjs test/reload.test.mjs   # 用假的 claude 跑完整流程和自动加载新代码，无需联网
 cp 203-talk-agent.service ~/.config/systemd/user/
 systemctl --user daemon-reload && systemctl --user enable --now 203-talk-agent
 ```
 
-网关路由在 203work 仓库 `gateway/routes.json`（`/talk-agent` → `127.0.0.1:8797`），改后 `systemctl --user reload 203-apps-gateway`。状态在 `STATE_DIR`（默认 `~/203-talk-agent`，0700），包括对话、会话 ID、登录摘要和附件，不进 Git。修改 `server.mjs` 后需要 `systemctl --user restart 203-talk-agent`（会中断正在进行的一轮）。
+网关路由在 203work 仓库 `gateway/routes.json`（`/talk-agent` → `127.0.0.1:8797`），改后 `systemctl --user reload 203-apps-gateway`。状态在 `STATE_DIR`（默认 `~/203-talk-agent`，0700），包括对话、会话 ID、登录摘要和附件，不进 Git。**新代码自动生效**：服务每 10 秒（以及每轮结束时）比对 `server.mjs` 有没有被改过；只在没有进行中的消息时，先 `node --check`，通过就干净退出，由 systemd（`Restart=always`）几秒内用新代码重新拉起，排队中的消息保存在 `state.json`，重启后接着做；语法有误的修改不会被加载（日志里记一次 `does not parse`）。所以 Agent 自己改了服务代码、或有人在这台机器上改了，都不用手动重启，也不会打断正在进行的一轮。`RELOAD_POLL_MS` 可调检查间隔。注意它**不会**自动从 GitHub 拉代码：别处推送的改动需要在这台机器的项目目录里 `git pull --ff-only origin main`（Agent 动手前会先拉；服务代码被拉下来后同样自动加载）。
