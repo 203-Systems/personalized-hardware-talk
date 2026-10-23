@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#101114">
+  <meta name="description" content="从你的创意到个性化硬件：基于开放硬件的 AI 辅助创作。203 Systems 演讲演示。">
+  <title>从你的创意到个性化硬件 · 203 Systems</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <main id="stage" aria-label="演示文稿">
+    <div id="canvas"><img id="slide" alt="" draggable="false" fetchpriority="high"></div>
+    <p id="status" class="sr-only" role="status" aria-live="polite"></p>
+    <p id="error" hidden>演示文稿加载失败，请刷新页面重试。</p>
+  </main>
+  <nav id="controls" aria-label="演示控制">
+    <a class="brand" href="https://203.io" target="_blank" rel="noopener noreferrer" aria-label="203 Systems 官网">203 <span>SYSTEMS</span></a>
+    <div class="paging">
+      <button id="previous" aria-label="上一页（左方向键）" title="上一页 ←">←</button>
+      <button id="counter" aria-label="打开页面目录" title="页面目录 O">01 <span>/ 11</span></button>
+      <button id="next" aria-label="下一页（右方向键）" title="下一页 →">→</button>
+    </div>
+    <div class="tools">
+      <button id="overview" title="目录 O">目录</button>
+      <button id="transcript" title="本页文字 T">文字</button>
+      <a id="download" download>本页 PPTX <span aria-hidden="true">↗</span></a>
+      <button id="fullscreen" title="全屏 F">全屏</button>
+      <button id="help" aria-label="快捷键帮助" title="快捷键 ?">?</button>
+    </div>
+  </nav>
+  <button id="show-controls" title="显示控制栏 H" hidden>显示控制</button>
+  <dialog id="overview-dialog" aria-labelledby="overview-title">
+    <header><div><p class="eyebrow">203 SYSTEMS / PRESENTATION</p><h1 id="overview-title">从你的创意到个性化硬件</h1></div><button data-close aria-label="关闭目录">关闭 ×</button></header>
+    <div id="grid"></div>
+    <footer><a id="source-download" download>下载完整 PPTX ↗</a><span>选择页面直接跳转 · Esc 返回</span></footer>
+  </dialog>
+  <dialog id="text-dialog" aria-labelledby="text-title">
+    <header><h2 id="text-title">本页文字</h2><button data-close aria-label="关闭本页文字">关闭 ×</button></header>
+    <div id="slide-text"></div>
+  </dialog>
+  <dialog id="help-dialog" aria-labelledby="help-title">
+    <header><h2 id="help-title">演示快捷键</h2><button data-close aria-label="关闭帮助">关闭 ×</button></header>
+    <dl><dt>← / → · 空格 · Page Up / Down</dt><dd>上一页 / 下一页</dd><dt>Home / End</dt><dd>首页 / 尾页</dd><dt>O</dt><dd>页面目录</dd><dt>F</dt><dd>切换全屏</dd><dt>H</dt><dd>隐藏 / 显示控制栏</dd><dt>T</dt><dd>查看本页文字</dd><dt>Esc</dt><dd>关闭弹窗 / 退出全屏</dd></dl>
+    <p>手机支持左右滑动翻页。页面链接会保留当前页码，可直接分享。</p>
+  </dialog>
+</body>
+</html>

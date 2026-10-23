@@ -1,0 +1,195 @@
+{
+  "title": "从你的创意到个性化硬件",
+  "width": 12192000,
+  "height": 6858000,
+  "source": "source/从你的创意到个性化硬件_讲座版_v5.pptx",
+  "slides": [
+    {
+      "number": 1,
+      "title": "从你的创意到个性化硬件",
+      "text": [
+        "从你的创意到个性化硬件",
+        "From Your Ideas to Personalized Hardware",
+        "基于开放硬件的 AI 辅助创作",
+        "Creating with AI on Open Hardware",
+        "01"
+      ],
+      "image": "assets/previews/slide-01.png",
+      "pptx": "slides/slide-01.pptx"
+    },
+    {
+      "number": 2,
+      "title": "用户正在改写音乐设备",
+      "text": [
+        "音乐设备的玩法，",
+        "正在被用户改写",
+        "AI Coding",
+        "让更多创作者参与功能开发",
+        "一个例子",
+        "M-VAVE FM-1 · Felucca",
+        "社区定制固件，明确采用 ",
+        "AI ",
+        "编程辅助",
+        "Felucca 项目文档",
+        "02"
+      ],
+      "image": "assets/previews/slide-02.png",
+      "pptx": "slides/slide-02.pptx"
+    },
+    {
+      "number": 3,
+      "title": "203 接近十年的准备",
+      "text": [
+        "203 ",
+        "接近十年的准备",
+        "近 ",
+        "10 ",
+        "年",
+        "我们持续思考同一个问题",
+        "如何让用户持续定义",
+        "自己手中的工具",
+        "Matrix Founder Edition",
+        "03"
+      ],
+      "image": "assets/previews/slide-03.png",
+      "pptx": "slides/slide-03.pptx"
+    },
+    {
+      "number": 4,
+      "title": "MatrixOS 开放系统",
+      "text": [
+        "面向软件定义控制器的开放系统",
+        "硬件",
+        "系统",
+        "开发者",
+        "Mystrix ",
+        "的输入、灯光与连接能力",
+        "公开 ",
+        "API",
+        "、",
+        "Python ",
+        "与 ",
+        "C++ ",
+        "开发入口",
+        "官方文档、示例与网页开发工具包",
+        "让自己的应用，使用设备已有的能力",
+        "04"
+      ],
+      "image": "assets/previews/slide-04.png",
+      "pptx": "slides/slide-04.pptx"
+    },
+    {
+      "number": 5,
+      "title": "原生开放开发的基础",
+      "text": [
+        "原生开放开发的基础",
+        "基于封闭平台的第三方适配",
+        "MatrixOS ",
+        "的开发基础",
+        "接口可能依赖逆向或社区整理",
+        "需要自行建立测试与调试路径",
+        "升级后的适配，往往由项目承担",
+        "官方 ",
+        "API ",
+        "与配套文档",
+        "AI 原生开发和测试环境",
+        "系统、接口与文档协同演进",
+        "开发者把更多时间，用在自己的应用上",
+        "05"
+      ],
+      "image": "assets/previews/slide-05.png",
+      "pptx": "slides/slide-05.pptx"
+    },
+    {
+      "number": 6,
+      "title": "Demo",
+      "text": [
+        "Demo",
+        "06"
+      ],
+      "image": "assets/previews/slide-06.png",
+      "pptx": "slides/slide-06.pptx"
+    },
+    {
+      "number": 7,
+      "title": "演示一：和弦涟漪",
+      "text": [
+        "演示一",
+        "和弦涟漪",
+        "一句想法，一件可以演奏的工具",
+        "按下格子，演奏和弦",
+        "松开停止，灯光向外扩散",
+        "大调与小调，一键切换",
+        "Codex ",
+        "查阅 ",
+        "Wiki",
+        "，依据 ",
+        "Python API ",
+        "实现",
+        "07"
+      ],
+      "image": "assets/previews/slide-07.png",
+      "pptx": "slides/slide-07.pptx"
+    },
+    {
+      "number": 8,
+      "title": "演示二：在浏览器里运行",
+      "text": [
+        "演示二",
+        "同一个应用，",
+        "在浏览器里运行",
+        "dev.203.io",
+        "运行应用，观察效果，再修改一个想法",
+        "先让想法跑起来，钱包晚一点参与。",
+        "08"
+      ],
+      "image": "assets/previews/slide-08.png",
+      "pptx": "slides/slide-08.pptx"
+    },
+    {
+      "number": 9,
+      "title": "203 的产品与下一步",
+      "text": [
+        "203 ",
+        "的产品与下一步",
+        "Mystrix / Mystrix Pro",
+        "可编程网格控制器",
+        "NullPerator",
+        "便携音乐创作设备，持续开发中",
+        "09"
+      ],
+      "image": "assets/previews/slide-09.png",
+      "pptx": "slides/slide-09.pptx"
+    },
+    {
+      "number": 10,
+      "title": "更多创意，合适的硬件",
+      "text": [
+        "让更多创意，拥有合适的硬件",
+        "更多工具形态",
+        "更广价格覆盖",
+        "让作品更容易分享、复用与继续开发",
+        "AI ",
+        "让软件实现更容易",
+        "硬件体验仍需要长期积累",
+        "代码生成很快，按键手感不会跟着一起生成。",
+        "10"
+      ],
+      "image": "assets/previews/slide-10.png",
+      "pptx": "slides/slide-10.pptx"
+    },
+    {
+      "number": 11,
+      "title": "You will own everything",
+      "text": [
+        "You will own everything",
+        "and you will be ",
+        "happy.",
+        "你将拥有一切，也会拥有属于自己的快乐。",
+        "11"
+      ],
+      "image": "assets/previews/slide-11.png",
+      "pptx": "slides/slide-11.pptx"
+    }
+  ]
+}
