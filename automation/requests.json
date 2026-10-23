@@ -26,8 +26,8 @@
     "7fd5aebe-9fbb-4ff9-98e1-9b525b38b866": {
       "version": "v5",
       "slide": 1,
-      "stage": "validating",
-      "latestReadReplyId": "aeeb24db-2ec6-5c71-afb3-94e05d06f47b",
+      "stage": "completed",
+      "latestReadReplyId": "02f22301-af94-5615-ac61-c8512b06da25",
       "targetVersion": "v7",
       "scope": "重构全部11页的瑞士国际主义网格构图，保留内容、原图、备注，同步单页、完整讲稿、预览及归档",
       "startedAt": "2026-10-23T12:47:09+08:00",
@@ -36,8 +36,17 @@
         "visualReview": "11页1920×1080预览逐页目视确认，无裁切或重叠",
         "singleAndCompleteRender": "11页单页与完整稿逐像素一致",
         "preservation": "仅11个slide XML改变；文字（除空白整理）、原始图片、备注和链接完整保留",
-        "firstPartyFinalizer": "完整稿结构、版式和导入检查通过，0发现/0警告"
-      }
+        "firstPartyFinalizer": "完整稿结构、版式和导入检查通过，0发现/0警告",
+        "onlineFiles": "版本清单、11个预览、11个单页PPTX及完整稿全部与发布文件逐字节一致",
+        "browser": "目视确认v7第1/5/8/11页展示与对应单页下载入口"
+      },
+      "releaseCommit": "de869e354152cf182fa25ad8f2a32d682015cb36",
+      "deploymentUrl": "https://github.com/203-Systems/personalized-hardware-talk/actions/runs/39903568804",
+      "completionReplyId": "02f22301-af94-5615-ac61-c8512b06da25",
+      "publishedVersion": "v7",
+      "pageUrl": "https://203-systems.github.io/personalized-hardware-talk/?v=v7#/1",
+      "deploymentConclusion": "success",
+      "completedAt": "2026-10-23T13:05:49+08:00"
     }
   }
 }
