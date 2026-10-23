@@ -4,6 +4,8 @@
 
 **[在线演示](https://203-systems.github.io/personalized-hardware-talk/)**
 
+换机器维护请阅读 [HANDOFF.md](HANDOFF.md)，网站无需关闭，自动处理会话和维护端密钥需另行迁移。
+
 原始讲座共 11 页，宽高比 **16:9**。这里提供按页浏览的网页，以及每页独立、可编辑的 PowerPoint 文件。
 
 ## 使用
