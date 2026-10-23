@@ -12,4 +12,16 @@
 6. 运行适合改动的检查，至少 `python3 scripts/validate.py`、`python3 scripts/validate_versions.py`，前端改动检查 JS 并浏览器验证。提交并推送，等待 GitHub Pages 对该提交部署成功，再核对线上结果，才能回复已发布。后端改动需要独立 Sites 发布并验证。任何失败都如实回复，不能标为完成。
 7. 原需求状态受提交者管理凭证控制，AI 不冒用提交者凭证；AI 进展和结果以回复显示。无新需求/回复且无待续工作时保持安静；仅在发布、失败或需要用户输入时报告。
 
+## 实时进度回写
+
+页面打开评论面板后每 5 秒读取服务，显示经 Ed25519 签名验证的阶段及完整记录。自动处理程序必须在每个实际阶段及时回写，而非只在最后留言；不发送虚假百分比或预先宣称后续阶段完成。
+
+```sh
+python3 scripts/feedback_queue.py progress --version v5 --slide 7 --request ID --stage editing --file /tmp/progress.txt
+```
+
+阶段：`accepted` 接管、`editing` 修改、`validating` 验证、`publishing` 已推送正在等待发布、`completed` 已验证线上成功、`blocked` 等待补充、`failed` 失败。同一阶段可用 `--event validating-2` 发布有实际变化的续报；稳定 event 防止重试重复。每段描述宜控制在 300 字以内。完成时添加 `--url 'https://203-systems.github.io/personalized-hardware-talk/?v=v6#/7'`。普通追问继续使用 `reply`。
+
+签名密钥只保存在 `.automation/progress-key.pem`，公钥在 `collaboration-config.json`。不要重置或公开密钥；若维护环境迁移导致私钥丢失，先报告，不能静默换钥令历史进度失效。超过 15 分钟无更新会显示可能仍在处理或维护端离线；此时不要为了消除提示发送没有事实变化的进度。
+
 Git 推送如遇现有 helper 权限错误，可使用 `git -c credential.helper= -c 'credential.helper=!gh auth git-credential' push`，不要改全局凭据配置。

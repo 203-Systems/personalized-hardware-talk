@@ -1,3 +1,8 @@
 {
-  "api": "https://hardware-talk-feedback-203.goofy-skink-7467.chatgpt.site/api/feedback"
+  "api": "https://hardware-talk-feedback-203.goofy-skink-7467.chatgpt.site/api/feedback",
+  "progressPublicKey": {
+    "crv": "Ed25519",
+    "x": "8SamVJIFt5lf5k5fO_zBx0Q0QHe-gSGV2U0emxrbhCw",
+    "kty": "OKP"
+  }
 }

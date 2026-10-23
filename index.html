@@ -36,6 +36,7 @@
     <header><div><p class="eyebrow" id="review-context"></p><h2 id="review-title">评论与需求</h2></div><button id="close-review" aria-label="关闭协作面板">×</button></header>
     <div class="review-filters"><label>类型<select id="feedback-kind-filter"><option value="all">全部</option><option value="comment">评论与标注</option><option value="request">需求</option></select></label><label>状态<select id="feedback-status-filter"><option value="all">全部状态</option><option value="open">待处理</option><option value="planned">已计划</option><option value="done">已完成</option><option value="resolved">已解决</option></select></label><button id="refresh-feedback">刷新</button></div>
     <p id="feedback-message" role="status" aria-live="polite"></p>
+    <p id="feedback-sync" class="feedback-sync">打开面板后每 5 秒自动同步处理进度</p>
     <div id="feedback-list"></div><button id="more-feedback" hidden>加载更多</button>
     <form id="feedback-form">
       <h3 id="compose-title">发送反馈</h3>

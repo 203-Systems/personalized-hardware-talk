@@ -1,7 +1,8 @@
+import {verifyProgress, progressCard} from './progress.js';
 const $ = selector => document.querySelector(selector);
 const statusNames = {open:'待处理',planned:'已计划',done:'已完成',resolved:'已解决'};
 let api, context, items = [], replies = [], point = null, replyTo = null, offset = 0, requestSerial = 0;
-let localKey, ownIds, pendingId = crypto.randomUUID();
+let localKey, ownIds, pendingId = crypto.randomUUID(), progressPublicKey, verified = new Map(), refreshing=false, lastSync=0, lastSnapshot='';
 const storage = {
   get(key, fallback) { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } },
   set(key,value) { try { localStorage.setItem(key,JSON.stringify(value)); return true; } catch { return false; } },
@@ -14,6 +15,7 @@ function openPanel(open = true) {
   $('#review-button').setAttribute('aria-expanded',String(open));
   document.body.classList.toggle('review-open',open);
   if (open) document.body.classList.remove('clean');
+  if (open) refresh(false,true);
 }
 function cancelAnnotation() { document.body.classList.remove('annotating'); $('#annotation-hint').hidden = true; }
 function saveDraft() {
@@ -50,8 +52,14 @@ function threadLink(item) {
   const url = new URL(location.href);url.searchParams.set('v',item.version);url.searchParams.set('thread',item.parent_id || item.id);url.hash=`/${item.slide}`;return url.href;
 }
 function isSelected(item) {return new URL(location.href).searchParams.get('thread') === item.id;}
+function latestProgress(item) {return replies.filter(reply=>reply.parent_id===item.id && verified.has(reply.id)).map(reply=>verified.get(reply.id)).sort((a,b)=>a.createdAt-b.createdAt || a.id.localeCompare(b.id)).at(-1);}
+function effectiveStatus(item) {
+  if(item.kind!=='request' || item.status==='resolved')return item.status;
+  const stage=latestProgress(item)?.stage;
+  return stage==='completed' ? 'done' : ['accepted','editing','validating','publishing'].includes(stage) ? 'planned' : stage ? 'open' : item.status;
+}
 function displayItems() {
-  return items.filter(item => ($('#feedback-kind-filter').value === 'all' || item.kind === $('#feedback-kind-filter').value) && ($('#feedback-status-filter').value === 'all' || item.status === $('#feedback-status-filter').value));
+  return items.filter(item => ($('#feedback-kind-filter').value === 'all' || item.kind === $('#feedback-kind-filter').value) && ($('#feedback-status-filter').value === 'all' || effectiveStatus(item) === $('#feedback-status-filter').value));
 }
 function renderMarkers() {
   const layer=$('#markers');layer.replaceChildren();
@@ -73,7 +81,7 @@ function renderList() {
   for (const item of filtered) {
     const article=element('article',undefined,'feedback-item');article.id=`feedback-${item.id}`;article.tabIndex=-1;
     if (isSelected(item)) article.classList.add('selected');
-    const meta=element('div',undefined,'feedback-meta');meta.append(element('span',item.kind==='request'?'需求':'评论'),element('span',statusNames[item.status] || item.status));
+    const meta=element('div',undefined,'feedback-meta');meta.append(element('span',item.kind==='request'?'需求':'评论'),element('span',statusNames[effectiveStatus(item)] || item.status));
     article.append(meta,element('p',item.content,'feedback-content'),element('p',`${item.author} · ${new Date(item.created_at).toLocaleString('zh-CN',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})}`,'feedback-author'));
     const actions=element('div',undefined,'feedback-actions');
     const reply=element('button','回复');reply.addEventListener('click',()=>{replyTo=item.id;point=null;$('#feedback-kind').value=item.kind;updateComposer();saveDraft();$('#feedback-content').focus();});
@@ -90,7 +98,10 @@ function renderList() {
       });actions.append(withdraw);
     }
     article.append(actions);
+    const threadProgress=replies.filter(reply=>reply.parent_id===item.id && verified.has(reply.id)).map(reply=>verified.get(reply.id)).sort((a,b)=>a.createdAt-b.createdAt || a.id.localeCompare(b.id));
+    if(item.kind==='request' && item.status!=='resolved')article.append(progressCard(threadProgress));
     for (const child of replies.filter(reply=>reply.parent_id===item.id)) {
+      if(verified.has(child.id))continue;
       const box=element('div',undefined,'feedback-reply');box.append(element('p',child.content),element('small',child.author));
       if(ownIds.includes(child.id)) {const remove=element('button','撤回回复');remove.addEventListener('click',async()=>{try{await request('DELETE',{id:child.id});await refresh();}catch(error){message(error.message,true);}});box.append(remove);}
       article.append(box);
@@ -99,31 +110,56 @@ function renderList() {
   }
   renderMarkers();
 }
-async function refresh(more=false) {
-  if (!context) return;
+function syncStatus(text,error=false) {$('#feedback-sync').textContent=text;$('#feedback-sync').classList.toggle('error',error);}
+async function refresh(more=false,quiet=false) {
+  if (!context || (quiet && refreshing)) return;
+  refreshing=true;
   const serial=++requestSerial;
   const current={...context};
   const nextOffset=more ? offset+30 : 0;
-  const url=new URL(api);url.searchParams.set('version',current.version);url.searchParams.set('slide',current.slide);url.searchParams.set('offset',nextOffset);
-  const target=new URL(location.href).searchParams.get('thread');if(target)url.searchParams.set('thread',target);
-  message('正在加载共享反馈…');$('#more-feedback').disabled=true;
+  const target=new URL(location.href).searchParams.get('thread');
+  if(!quiet)message('正在加载共享反馈…');$('#more-feedback').disabled=true;
   try {
-    const response=await fetch(url,{credentials:'omit',cache:'no-store'});const data=await response.json();if(!response.ok)throw new Error(data.error || '评论加载失败。');
+    const collected={items:[],replies:[],hasMore:false};
+    // Refresh all loaded pages without collapsing pagination or dropping older threads.
+    const end=quiet && !target ? offset : nextOffset;
+    for(let page=quiet ? 0 : nextOffset;page<=end;page+=30){
+      const url=new URL(api);url.searchParams.set('version',current.version);url.searchParams.set('slide',current.slide);url.searchParams.set('offset',page);if(target)url.searchParams.set('thread',target);
+      const response=await fetch(url,{credentials:'omit',cache:'no-store',signal:AbortSignal.timeout(12000)});const data=await response.json();if(!response.ok)throw new Error(data.error || '评论加载失败。');
+      collected.items.push(...data.items);collected.replies.push(...data.replies);collected.hasMore=data.hasMore;
+      if(!data.hasMore)break;
+    }
+    const data=collected;
+    const nextItems=more?[...items,...data.items]:data.items;
+    const nextReplies=more?[...replies,...data.replies]:data.replies;
+    const checked=new Map();
+    await Promise.all(nextReplies.map(async reply=>{const parent=nextItems.find(item=>item.id===reply.parent_id);if(parent){const progress=await verifyProgress(reply,parent,progressPublicKey);if(progress)checked.set(reply.id,progress);}}));
     if (serial!==requestSerial || identity(current)!==identity(context))return;
-    items=more?[...items,...data.items]:data.items;replies=more?[...replies,...data.replies]:data.replies;offset=nextOffset;
-    $('#more-feedback').hidden=!data.hasMore;renderList();message(`${items.length} 条反馈 · 共享保存`);
-    if(target) {openPanel();$(`#feedback-${target}`)?.scrollIntoView({block:'nearest'});}
-  } catch(error) {if(serial===requestSerial){message(error.message || '无法连接协作服务，请稍后刷新。',true);$('#feedback-list').replaceChildren();$('#more-feedback').hidden=true;}}
-  finally{if(serial===requestSerial)$('#more-feedback').disabled=false;}
+    const snapshot=JSON.stringify([nextItems,nextReplies,Math.floor(Date.now()/60000)]);
+    items=nextItems;replies=nextReplies;verified=checked;if(!quiet)offset=nextOffset;
+    $('#more-feedback').hidden=!data.hasMore;
+    if(snapshot!==lastSnapshot || !quiet){
+      const panel=$('#review-panel'),scroll=panel.scrollTop;
+      const expanded=[...document.querySelectorAll('.ai-progress details[open]')].map(el=>el.closest('.feedback-item').id);
+      const active=document.activeElement,focusedItem=active?.closest('.feedback-item')?.id;
+      renderList();lastSnapshot=snapshot;
+      for(const id of expanded){const details=document.getElementById(id)?.querySelector('.ai-progress details');if(details)details.open=true;}
+      if(quiet){panel.scrollTop=scroll;if(focusedItem)document.getElementById(focusedItem)?.focus({preventScroll:true});}
+    }
+    lastSync=Date.now();syncStatus(`自动同步 · 每 5 秒 · ${new Date(lastSync).toLocaleTimeString('zh-CN')}`);
+    if(!quiet)message(`${items.length} 条反馈 · 共享保存`);
+    if(target && !quiet) {openPanel();$(`#feedback-${target}`)?.scrollIntoView({block:'nearest'});}
+  } catch(error) {if(serial===requestSerial){syncStatus(navigator.onLine?'同步失败，保留上次结果；5 秒后重试':'网络已断开，联网后自动恢复',true);if(!quiet)message(error.message || '无法连接协作服务，请稍后刷新。',true);}}
+  finally{if(serial===requestSerial){refreshing=false;$('#more-feedback').disabled=false;}}
 }
 export async function initCollaboration() {
-  const response=await fetch('collaboration-config.json');if(!response.ok)throw new Error('Unable to load collaboration configuration');api=(await response.json()).api;
+  const response=await fetch('collaboration-config.json',{cache:'no-store'});if(!response.ok)throw new Error('Unable to load collaboration configuration');const config=await response.json();api=config.api;progressPublicKey=config.progressPublicKey;
   localKey=storage.get('203-talk:edit-key',null);
   if (!localKey) {localKey=[...crypto.getRandomValues(new Uint8Array(32))].map(x=>x.toString(16).padStart(2,'0')).join('');storage.set('203-talk:edit-key',localKey);}
   ownIds=storage.get('203-talk:own-ids',[]);
   document.addEventListener('slidechange',event=>{
     const next=event.detail;if(context && identity(context)===identity(next))return;
-    saveDraft();cancelAnnotation();context=next;items=[];replies=[];offset=0;
+    saveDraft();cancelAnnotation();context=next;items=[];replies=[];offset=0;verified=new Map();lastSnapshot='';
     $('#review-context').textContent=`${context.version} / 第 ${context.slide} 页`;
     loadDraft();renderList();refresh();
   });
@@ -132,6 +168,11 @@ export async function initCollaboration() {
   $('#refresh-feedback').addEventListener('click',()=>{const url=new URL(location.href);url.searchParams.delete('thread');history.replaceState(null,'',url);refresh();});
   $('#more-feedback').addEventListener('click',()=>refresh(true));
   $('#feedback-kind-filter').addEventListener('change',renderList);$('#feedback-status-filter').addEventListener('change',renderList);
+  const poll=()=>{if(!document.hidden && !$('#review-panel').hidden && navigator.onLine)refresh(false,true);};
+  setInterval(poll,5000);
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)syncStatus('页面在后台，返回后恢复自动同步');else poll();});
+  window.addEventListener('online',poll);
+  window.addEventListener('offline',()=>syncStatus('网络已断开，联网后自动恢复',true));
   $('#feedback-form').addEventListener('input',saveDraft);
   $('#cancel-reply').addEventListener('click',()=>{replyTo=null;updateComposer();saveDraft();});
   $('#annotate').addEventListener('click',()=>{openPanel(false);document.body.classList.add('annotating');$('#annotation-hint').hidden=false;});
