@@ -48,8 +48,9 @@
   </aside>
   <aside id="agent-panel" aria-labelledby="agent-title" hidden>
     <header><div><p class="eyebrow">CLAUDE CODE · 独立会话</p><h2 id="agent-title">Agent</h2><p id="agent-who"></p></div><div class="agent-head-actions"><button id="agent-new" type="button" title="开启新会话：Agent 不再记得之前的对话" hidden>新会话</button><button id="agent-signout" type="button" hidden>退出</button><button id="close-agent" type="button" aria-label="关闭 Agent 面板">×</button></div></header>
+    <div id="agent-run"><label for="agent-model">模型</label><select id="agent-model" aria-label="模型" title="模型：Opus 细致但慢（默认）；Sonnet 快；Haiku 最快，适合小改；Fable 最强也最慢"></select><label for="agent-effort">强度</label><select id="agent-effort" aria-label="思考强度" title="思考强度：越高想得越久越细，越低越快"></select></div>
     <section id="agent-login" hidden>
-      <p class="agent-intro">这里直接连到 203 服务器上一个专门维护这份演讲的 Claude Code 会话：你说要改什么，它就在项目里修改、检查、发布，每一步都实时显示在这里。可以为每条消息选择模型和思考强度。</p>
+      <p class="agent-intro">这里直接连到 203 服务器上一个专门维护这份演讲的 Claude Code 会话：你说要改什么，它就在项目里修改、检查、发布，每一步都实时显示在这里。可以为每条消息选择模型和思考强度：上面「模型 / 强度」现在就能选，登录后发出的消息按所选运行。</p>
       <form id="agent-login-form"><label>昵称<input id="agent-name" maxlength="24" autocomplete="nickname" required placeholder="团队里怎么称呼你"></label><label>团队口令<input id="agent-code" type="password" autocomplete="current-password" required placeholder="进入 203 工作台用的口令"></label><button type="submit">连接 Agent</button><p id="agent-login-message" role="status" aria-live="polite"></p></form>
       <p class="privacy-note">只有 203 团队成员可以使用。登录在这台设备上保留 30 天。</p>
     </section>
@@ -61,7 +62,7 @@
         <div id="agent-files" hidden></div>
         <label for="agent-input" class="sr-only">给 Agent 的消息</label><textarea id="agent-input" rows="3" maxlength="20000" placeholder="直接告诉 Agent 要做什么…（Enter 发送，Shift+Enter 换行，可粘贴截图）"></textarea>
         <label class="agent-context"><input type="checkbox" id="agent-context" checked> 附带当前页面 <span id="agent-context-label"></span></label>
-        <div class="agent-controls"><select id="agent-model" aria-label="模型" title="模型：Opus 细致但慢（默认）；Sonnet 快；Haiku 最快，适合小改；Fable 最强也最慢"></select><select id="agent-effort" aria-label="思考强度" title="思考强度：越高想得越久越细，越低越快"></select><button type="button" id="agent-attach" title="添加图片或文件（也可粘贴截图、拖入面板）" aria-label="添加附件">＋ 附件</button><input type="file" id="agent-file" multiple hidden><button type="button" id="agent-stop" hidden>■ 停止</button><button type="submit" id="agent-send">发送</button></div>
+        <div class="agent-controls"><button type="button" id="agent-attach" title="添加图片或文件（也可粘贴截图、拖入面板）" aria-label="添加附件">＋ 附件</button><input type="file" id="agent-file" multiple hidden><button type="button" id="agent-stop" hidden>■ 停止</button><button type="submit" id="agent-send">发送</button></div>
       </form>
     </section>
   </aside>
