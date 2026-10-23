@@ -3,18 +3,25 @@
     "dcf12e36-b522-4257-8830-2784109e6f81": {
       "version": "v5",
       "slide": 7,
-      "stage": "deploying",
-      "latestReadReplyId": "a4538a17-c4b3-5c43-8a9d-fe7d0180a85d",
+      "stage": "completed",
+      "latestReadReplyId": "1ba82e1d-eeb8-57e0-ab72-eed45176e7b9",
       "targetVersion": "v6",
       "scope": "第7页瑞士国际主义网格排版，同步可编辑PPTX、预览与完整稿，保留v5",
       "validation": {
         "grid": "1280×720；左右边距64，12栏×74，栏距24；左5栏466，右7栏662；8px纵向间距单位",
         "editableTextShapes": 7,
         "singleAndCompleteRender": "1920×1080像素一致",
-        "completeDeckOtherParts": "仅slide7.xml改变，其他幻灯片、备注及媒体逐字节不变"
+        "completeDeckOtherParts": "仅slide7.xml改变，其他幻灯片、备注及媒体逐字节不变",
+        "onlineFiles": "版本清单、单页PPTX、完整讲稿和预览均与发布文件逐字节一致",
+        "browser": "已目视确认v6第7页正常显示，下载入口指向v6单页PPTX"
       },
       "publishedVersion": "v6",
-      "pageUrl": "https://203-systems.github.io/personalized-hardware-talk/?v=v6#/7"
+      "pageUrl": "https://203-systems.github.io/personalized-hardware-talk/?v=v6#/7",
+      "completionReplyId": "1ba82e1d-eeb8-57e0-ab72-eed45176e7b9",
+      "releaseCommit": "29f0d0d10dc72dcb05a81e268e40ff233a9ef1dc",
+      "deploymentUrl": "https://github.com/203-Systems/personalized-hardware-talk/actions/runs/39900863102",
+      "deploymentConclusion": "success",
+      "completedAt": "2026-10-23T12:35:16+08:00"
     }
   }
 }
