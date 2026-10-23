@@ -29,5 +29,6 @@
 - 网站：https://203-systems.github.io/personalized-hardware-talk/
 - 反馈 API：https://hardware-talk-feedback-203.goofy-skink-7467.chatgpt.site/api/feedback
 - Sites 项目：`appgprj_6adada92d01c819199bf41a628d362ce`，后端源码及身份配置在 `feedback-service/`。
+- 网页“Agent”面板：203 服务器（运行 203 工作台的 Ubuntu 机器）上的 Claude Code 独立会话，服务 `203-talk-agent.service`（用户级 systemd），源码 `agent-service/`，经 203 apps 网关 `https://apps.203.io/talk-agent/` 访问，登录用 203 工作台团队口令。对话、会话 ID 和附件在该机器 `~/203-talk-agent/`，不进 Git。该机器上没有 `.automation/` 进度签名私钥。
 
 前端推送 `main` 后由 GitHub Pages 自动部署，后端单独通过 Sites 发布。数据存放于 D1，不在本地文件夹内，不需要下载或重建生产数据库。新机器提交者浏览器的匿名身份和草稿不通过 Git 同步；这与维护端密钥不同。

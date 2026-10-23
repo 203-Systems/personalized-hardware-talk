@@ -4,5 +4,6 @@
     "crv": "Ed25519",
     "x": "8SamVJIFt5lf5k5fO_zBx0Q0QHe-gSGV2U0emxrbhCw",
     "kty": "OKP"
-  }
+  },
+  "agentApi": "https://apps.203.io/talk-agent/api"
 }

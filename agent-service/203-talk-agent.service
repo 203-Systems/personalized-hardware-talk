@@ -1,0 +1,20 @@
+[Unit]
+Description=Talk deck Agent: one Claude Code session maintaining personalized-hardware-talk, chat from the deployed page (https://apps.203.io/talk-agent/)
+After=network-online.target
+
+[Service]
+WorkingDirectory=/home/ubuntu/projects/personalized-hardware-talk/agent-service
+Environment=PORT=8797
+Environment=BASE_PATH=/talk-agent
+Environment=STATE_DIR=/home/ubuntu/203-talk-agent
+Environment=TEAM_CODE_FILE=/home/ubuntu/203-workbench/workbench.env
+Environment=CLAUDE_BIN=/home/ubuntu/.local/bin/claude
+Environment=PATH=/home/ubuntu/.local/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/usr/bin/node server.mjs
+Restart=always
+RestartSec=3
+TimeoutStopSec=15
+UMask=0022
+
+[Install]
+WantedBy=default.target

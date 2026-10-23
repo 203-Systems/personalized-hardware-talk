@@ -1,4 +1,5 @@
-import { initCollaboration } from './collaboration.js?r=progress-20261023-1';
+import { initCollaboration } from './collaboration.js?r=agent-20261023-1';
+import { initAgent } from './agent.js?r=agent-20261023-1';
 const $ = (selector) => document.querySelector(selector);
 let deck;
 let version;
@@ -70,6 +71,7 @@ async function init() {
   const response = await fetch('versions.json');
   if (!response.ok) throw new Error('Unable to load version manifest');
   versions = await response.json();
+  try { initAgent(); } catch (error) { console.error('Agent panel unavailable:', error); }
   await initCollaboration();
   const wanted = new URL(location.href).searchParams.get('v') || versions.current;
   const selected = versions.versions.find(item => item.id === wanted);

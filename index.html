@@ -6,11 +6,11 @@
   <meta name="theme-color" content="#101114">
   <meta name="description" content="从你的创意到个性化硬件：基于开放硬件的 AI 辅助创作。203 Systems 演讲演示。">
   <title>从你的创意到个性化硬件 · 203 Systems</title>
-  <link rel="stylesheet" href="styles.css?r=progress-20261023-1">
-  <script type="module" src="app.js?r=progress-20261023-1"></script>
+  <link rel="stylesheet" href="styles.css?r=agent-20261023-1">
+  <script type="module" src="app.js?r=agent-20261023-1"></script>
 </head>
 <body>
-  <header id="workspace-bar"><button id="versions-button" title="版本记录">版本 <strong id="version-label">加载中</strong> ▾</button><span id="version-notice">演讲协作</span><button id="review-button" aria-expanded="false" aria-controls="review-panel">评论 / 需求</button></header>
+  <header id="workspace-bar"><button id="versions-button" title="版本记录">版本 <strong id="version-label">加载中</strong> ▾</button><span id="version-notice">演讲协作</span><div class="bar-actions"><button id="agent-button" aria-expanded="false" aria-controls="agent-panel" title="直接和维护这份演讲的 Claude Code Agent 对话">Agent<span id="agent-dot" hidden></span></button><button id="review-button" aria-expanded="false" aria-controls="review-panel">评论 / 需求</button></div></header>
   <main id="stage" aria-label="演示文稿">
     <div id="canvas"><img id="slide" alt="" draggable="false" fetchpriority="high"><div id="markers" aria-label="页面标注"></div></div>
     <p id="status" class="sr-only" role="status" aria-live="polite"></p>
@@ -45,6 +45,25 @@
       <div id="annotation-draft"></div><div class="compose-actions"><button type="button" id="annotate">＋ 标注位置</button><button type="button" id="cancel-reply" hidden>取消回复</button><button type="submit" id="send-feedback">发送</button></div>
       <p class="privacy-note">匿名提交后公开可见。只有在原设备保留管理凭证，才能撤回自己的内容或更新状态。请勿填写私人信息。</p>
     </form>
+  </aside>
+  <aside id="agent-panel" aria-labelledby="agent-title" hidden>
+    <header><div><p class="eyebrow">CLAUDE CODE · 独立会话</p><h2 id="agent-title">Agent</h2><p id="agent-who"></p></div><div class="agent-head-actions"><button id="agent-new" type="button" title="开启新会话：Agent 不再记得之前的对话" hidden>新会话</button><button id="agent-signout" type="button" hidden>退出</button><button id="close-agent" type="button" aria-label="关闭 Agent 面板">×</button></div></header>
+    <section id="agent-login" hidden>
+      <p class="agent-intro">这里直接连到 203 服务器上一个专门维护这份演讲的 Claude Code 会话：你说要改什么，它就在项目里修改、检查、发布，每一步都实时显示在这里。可以为每条消息选择模型和思考强度。</p>
+      <form id="agent-login-form"><label>昵称<input id="agent-name" maxlength="24" autocomplete="nickname" required placeholder="团队里怎么称呼你"></label><label>团队口令<input id="agent-code" type="password" autocomplete="current-password" required placeholder="进入 203 工作台用的口令"></label><button type="submit">连接 Agent</button><p id="agent-login-message" role="status" aria-live="polite"></p></form>
+      <p class="privacy-note">只有 203 团队成员可以使用。登录在这台设备上保留 30 天。</p>
+    </section>
+    <section id="agent-chat" hidden>
+      <div id="agent-status" role="status" aria-live="polite"></div>
+      <div id="agent-log"><div id="agent-empty"><p>还没有对话。直接告诉 Agent 要做什么，例如：</p><ul><li>把这一页标题改短一点，发布新版本</li><li>看看网页上有哪些还没处理的需求</li><li>检查所有页面的文字有没有错别字</li></ul><p>勾选「附带当前页面」时，Agent 会知道你正在看哪一版第几页。</p></div></div>
+      <p id="agent-notice" role="status" hidden></p>
+      <form id="agent-form">
+        <div id="agent-files" hidden></div>
+        <label for="agent-input" class="sr-only">给 Agent 的消息</label><textarea id="agent-input" rows="3" maxlength="20000" placeholder="直接告诉 Agent 要做什么…（Enter 发送，Shift+Enter 换行，可粘贴截图）"></textarea>
+        <label class="agent-context"><input type="checkbox" id="agent-context" checked> 附带当前页面 <span id="agent-context-label"></span></label>
+        <div class="agent-controls"><select id="agent-model" aria-label="模型" title="模型：Opus 细致但慢（默认）；Sonnet 快；Haiku 最快，适合小改；Fable 最强也最慢"></select><select id="agent-effort" aria-label="思考强度" title="思考强度：越高想得越久越细，越低越快"></select><button type="button" id="agent-attach" title="添加图片或文件（也可粘贴截图、拖入面板）" aria-label="添加附件">＋ 附件</button><input type="file" id="agent-file" multiple hidden><button type="button" id="agent-stop" hidden>■ 停止</button><button type="submit" id="agent-send">发送</button></div>
+      </form>
+    </section>
   </aside>
   <dialog id="versions-dialog" aria-labelledby="versions-title"><header><div><p class="eyebrow">VERSION HISTORY</p><h2 id="versions-title">演示文稿版本</h2></div><button data-close aria-label="关闭版本记录">关闭 ×</button></header><p class="dialog-note">每个版本独立保存页面与文件，评论和标注跟随对应版本。</p><div id="version-list"></div><a href="https://github.com/203-Systems/personalized-hardware-talk/commits/main/" target="_blank" rel="noopener noreferrer">查看网站代码修改记录 ↗</a></dialog>
   <button id="show-controls" title="显示控制栏 H" hidden>显示控制</button>

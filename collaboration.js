@@ -1,4 +1,4 @@
-import {verifyProgress, progressCard} from './progress.js?r=progress-20261023-1';
+import {verifyProgress, progressCard} from './progress.js?r=agent-20261023-1';
 const $ = selector => document.querySelector(selector);
 const statusNames = {open:'待处理',planned:'已计划',done:'已完成',resolved:'已解决'};
 let api, context, items = [], replies = [], point = null, replyTo = null, offset = 0, requestSerial = 0;
@@ -15,6 +15,7 @@ function openPanel(open = true) {
   $('#review-button').setAttribute('aria-expanded',String(open));
   document.body.classList.toggle('review-open',open);
   if (open) document.body.classList.remove('clean');
+  if (open && $('#agent-panel') && !$('#agent-panel').hidden) $('#close-agent').click();
   if (open) refresh(false,true);
 }
 function cancelAnnotation() { document.body.classList.remove('annotating'); $('#annotation-hint').hidden = true; }
@@ -87,6 +88,12 @@ function renderList() {
     const reply=element('button','回复');reply.addEventListener('click',()=>{replyTo=item.id;point=null;$('#feedback-kind').value=item.kind;updateComposer();saveDraft();$('#feedback-content').focus();});
     const share=element('a','链接');share.href=threadLink(item);share.title='版本、页码和讨论专属链接';
     actions.append(reply,share);
+    // Team members signed in to the Agent panel can hand a request straight to the Claude Code session.
+    if (item.kind==='request' && storage.get('203-talk:agent',null)?.token) {
+      const handoff=element('button','交给 Agent');handoff.title='在 Agent 面板里附上这条需求，确认后发送';
+      handoff.addEventListener('click',()=>document.dispatchEvent(new CustomEvent('agent:compose',{detail:{text:`请处理网页上的这条匿名需求（${item.version} 第 ${item.slide} 页，需求 ID ${item.id}${item.x!==null && item.y!==null ? `，标注在横向 ${Math.round(item.x*100)}%、纵向 ${Math.round(item.y*100)}%` : ''}，${item.author} 发于 ${new Date(item.created_at).toLocaleString('zh-CN',{hour12:false})}）：\n${item.content}`}})));
+      actions.append(handoff);
+    }
     if (ownIds.includes(item.id)) {
       const select=element('select');select.setAttribute('aria-label','更新此反馈状态');
       for (const [value,label] of Object.entries(statusNames)) { const option=element('option',label);option.value=value;select.append(option); }select.value=item.status;
@@ -164,6 +171,7 @@ export async function initCollaboration() {
     loadDraft();renderList();refresh();
   });
   $('#review-button').addEventListener('click',()=>openPanel($('#review-panel').hidden));
+  document.addEventListener('agent:auth',()=>{if(!$('#review-panel').hidden)renderList();});
   $('#close-review').addEventListener('click',()=>openPanel(false));
   $('#refresh-feedback').addEventListener('click',()=>{const url=new URL(location.href);url.searchParams.delete('thread');history.replaceState(null,'',url);refresh();});
   $('#more-feedback').addEventListener('click',()=>refresh(true));

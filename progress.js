@@ -22,7 +22,7 @@ export function progressCard(events) {
   const heading=node('div',null,'ai-progress-heading');
   heading.append(node('strong',latest ? stages[stage] : '等待 AI 接管'),node('span',latest ? '已验证进度' : '需求队列'));
   card.append(heading);
-  if(!latest) {card.append(node('p','AI 每 5 分钟检查一次需求；维护电脑与 Codex 需在线。'));return card;}
+  if(!latest) {card.append(node('p','团队成员可在顶栏「Agent」面板把这条需求交给 Claude Code 处理。'));return card;}
   const steps=node('ol',null,'ai-progress-steps');
   pipeline.forEach((value,index)=>{
     const step=node('li',stages[value]);
